@@ -4,7 +4,7 @@ const { User, Thought } = require("../models");
 //find all users
 router.get("/users", async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).populate("thoughts").populate("friends");
     res.json(users);
   } catch (err) {
     res.status(500).json({ err });
@@ -14,7 +14,9 @@ router.get("/users", async (req, res) => {
 //find a user
 router.get("/users/:id", async ({ params: { id } }, res) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id)
+      .populate("thoughts")
+      .populate("friends");
     res.json(user);
   } catch (err) {
     res.status(500).json({ err });
@@ -57,12 +59,38 @@ router.delete("/users/:id", async ({ params: { id } }, res) => {
   }
 });
 
-router.post("/users/:id/friends", async ({ params: { id, friendId } }, res) => {
-  try {
-    await User.findOneAndUpdate(id, friendId);
-  } catch (err) {
-    res.status(500).json({ err });
+//post a friend
+router.post(
+  "/users/:id/friends/:friendId",
+  async ({ params: { id, friendId } }, res) => {
+    try {
+      await User.findByIdAndUpdate(
+        { _id: id },
+        { $push: { friends: friendId } },
+        { new: true }
+      );
+      res.json("Successfully added");
+    } catch (err) {
+      res.status(500).json({ err });
+    }
   }
-});
+);
+
+//delete a friend
+router.delete(
+  "/users/:id/friends/:friendId",
+  async ({ params: { id, friendId } }, res) => {
+    try {
+      await User.findByIdAndUpdate(
+        { _id: id },
+        { $pull: { friends: friendId } },
+        { new: true }
+      );
+      res.json("Successfully deleted");
+    } catch (err) {
+      res.status(500).json({ err });
+    }
+  }
+);
 
 module.exports = router;
