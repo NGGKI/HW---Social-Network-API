@@ -4,7 +4,7 @@ Github: https://github.com/NGGKI/HW---Social-Network-API
 
 ## Description
 
-Social Network API for a social network web application where users can share their thoughts, react to friends’ thoughts, and create a friend list
+Social Network API for a social network web application where users can share their thoughts, react to friends’ thoughts, and create a friend list.
 
 ## Table of Contents
 
@@ -28,6 +28,9 @@ To install necessary dependencies, run the following command:
 - User need to use Insomia or similiar environment to test the application
 
 ## Usage
+
+- Users can run the start at any time with `node sever.js` to start the application
+- User can refer to DEMOs for any assistance
 
 ## Contributing
 
